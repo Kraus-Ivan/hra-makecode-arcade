@@ -14,6 +14,7 @@ namespace SpriteKind {
     export const cursor = SpriteKind.create()
     export const button = SpriteKind.create()
     export const Kostlivec = SpriteKind.create()
+    export const button_small = SpriteKind.create()
 }
 namespace StrProp {
     export const Name = StrProp.create()
@@ -90,6 +91,30 @@ scene.onHitWall(SpriteKind.Player, function (sprite, location) {
     // narazeni na zed
     if (currentLevel == 2) {
         game.splash("Měl bych jít po cestě...")
+    }
+    // narazeni na zed
+    if (currentLevel == 4) {
+        game.splash("Měl bych se vrátit...")
+    }
+})
+sprites.onOverlap(SpriteKind.cursor, SpriteKind.button_small, function (sprite, otherSprite) {
+    if (otherSprite == button_lvl_1 && controller.A.isPressed()) {
+        currentLevel = 0
+        startNextLevel()
+    } else if (otherSprite == button_lvl_2 && controller.A.isPressed()) {
+        currentLevel = 1
+        startNextLevel()
+    } else if (otherSprite == button_lvl_3 && controller.A.isPressed()) {
+        currentLevel = 2
+        startNextLevel()
+    } else if (otherSprite == button_lvl_4 && controller.A.isPressed()) {
+        currentLevel = 3
+        startNextLevel()
+    } else if (otherSprite == button_lvl_5 && controller.A.isPressed()) {
+        currentLevel = 4
+        startNextLevel()
+    } else {
+    	
     }
 })
 // level 3\
@@ -361,34 +386,6 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile26`, function (sprite14
         tiles.setTileAt(tiles.getTileLocation(18, 6), sprites.dungeon.chestClosed)
         tiles.setTileAt(tiles.getTileLocation(16, 20), sprites.dungeon.chestClosed)
         fightScene = true
-        netopyr = sprites.create(img`
-            ........................
-            ........................
-            ........................
-            ........................
-            ..........ffff..........
-            ........ff1111ff........
-            .......fb111111bf.......
-            .......f11111111f.......
-            ......fd11111111df......
-            ......fd11111111df......
-            ......fddd1111dddf......
-            ......fbdbfddfbdbf......
-            ......fcdcf11fcdcf......
-            .......fb111111bf.......
-            ......fffcdb1bdffff.....
-            ....fc111cbfbfc111cf....
-            ....f1b1b1ffff1b1b1f....
-            ....fbfbffffffbfbfbf....
-            .........ffffff.........
-            ...........fff..........
-            ........................
-            ........................
-            ........................
-            ........................
-            `, SpriteKind.Enemy)
-        tiles.placeOnTile(netopyr, tiles.getTilesByType(assets.tile`spawner_black`)._pickRandom())
-        netopyr.follow(mySprite, 50)
     }
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -682,6 +679,9 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`active`, function (sprite102,
         tiles.placeOnTile(mySprite, tiles.getTileLocation(53, 9))
     }
 })
+sprites.onOverlap(SpriteKind.cursor, SpriteKind.button, function (sprite, otherSprite) {
+    otherSprite.setScale(2, ScaleAnchor.Middle)
+})
 // ovladani\
 // obecne funkce/
 function startNextLevel () {
@@ -709,6 +709,7 @@ function startNextLevel () {
         controller.moveSprite(mySprite, 80, 80)
         sprites.destroyAllSpritesOfKind(SpriteKind.cursor)
         sprites.destroyAllSpritesOfKind(SpriteKind.button)
+        sprites.destroyAllSpritesOfKind(SpriteKind.button_small)
         sprites.destroyAllSpritesOfKind(SpriteKind.Zbrojir)
         sprites.destroyAllSpritesOfKind(SpriteKind.House)
         sprites.destroyAllSpritesOfKind(SpriteKind.Tree)
@@ -857,6 +858,7 @@ function startNextLevel () {
             .cddbbbbbbbbbbbbbbbbbbbbbbddc...
             .cccccccccccccccccccccccccccc...
             `, SpriteKind.button)
+        button_1.setScale(1.75, ScaleAnchor.Middle)
         button_2 = sprites.create(img`
             .cccccccccccccccccccccccccccc...
             .cddbbbbbbbbbbbbbbbbbbbbbbddc...
@@ -875,7 +877,8 @@ function startNextLevel () {
             .cddbbbbbbbbbbbbbbbbbbbbbbddc...
             .cccccccccccccccccccccccccccc...
             `, SpriteKind.button)
-        cursor2 = sprites.create(img`
+        button_2.setScale(1.75, ScaleAnchor.Middle)
+        kursor = sprites.create(img`
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             . . . . . . . f . . . . . . . . 
@@ -893,9 +896,10 @@ function startNextLevel () {
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             `, SpriteKind.cursor)
+        kursor.setStayInScreen(true)
         button_1.setPosition(35, 65)
         button_2.setPosition(120, 65)
-        controller.moveSprite(cursor2, 80, 80)
+        controller.moveSprite(kursor, 80, 80)
     } else if (currentLevel == 1) {
         tiles.setCurrentTilemap(tilemap`level1`)
         level1()
@@ -1707,7 +1711,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.enemyTree, function (sprite4
         ........feeefeef........
         ........fefeffef........
         `],
-    50,
+    100,
     false
     )
     scene.cameraShake(4, 500)
@@ -1975,7 +1979,7 @@ sprites.onOverlap(SpriteKind.cursor, SpriteKind.button, function (sprite4, other
             .cdbbbbbbbbbbbbbbbbbbbbbbbbdc...
             .cddbbbbbbbbbbbbbbbbbbbbbbddc...
             .cccccccccccccccccccccccccccc...
-            `, SpriteKind.button)
+            `, SpriteKind.button_small)
         button_lvl_1.setPosition(35, 40)
         button_lvl_2 = sprites.create(img`
             .cccccccccccccccccccccccccccc...
@@ -1994,7 +1998,7 @@ sprites.onOverlap(SpriteKind.cursor, SpriteKind.button, function (sprite4, other
             .cdbbbbbbbbbbbbbbbbbbbbbbbbdc...
             .cddbbbbbbbbbbbbbbbbbbbbbbddc...
             .cccccccccccccccccccccccccccc...
-            `, SpriteKind.button)
+            `, SpriteKind.button_small)
         button_lvl_2.setPosition(35, 55)
         button_lvl_3 = sprites.create(img`
             .cccccccccccccccccccccccccccc...
@@ -2013,7 +2017,7 @@ sprites.onOverlap(SpriteKind.cursor, SpriteKind.button, function (sprite4, other
             .cdbbbbbbbbbbbbbbbbbbbbbbbbdc...
             .cddbbbbbbbbbbbbbbbbbbbbbbddc...
             .cccccccccccccccccccccccccccc...
-            `, SpriteKind.button)
+            `, SpriteKind.button_small)
         button_lvl_3.setPosition(35, 70)
         button_lvl_4 = sprites.create(img`
             .cccccccccccccccccccccccccccc...
@@ -2032,7 +2036,7 @@ sprites.onOverlap(SpriteKind.cursor, SpriteKind.button, function (sprite4, other
             .cdbbbbbbbbbbbbbbbbbbbbbbbbdc...
             .cddbbbbbbbbbbbbbbbbbbbbbbddc...
             .cccccccccccccccccccccccccccc...
-            `, SpriteKind.button)
+            `, SpriteKind.button_small)
         button_lvl_4.setPosition(35, 85)
         button_lvl_5 = sprites.create(img`
             .cccccccccccccccccccccccccccc...
@@ -2051,9 +2055,9 @@ sprites.onOverlap(SpriteKind.cursor, SpriteKind.button, function (sprite4, other
             .cdbbbbbbbbbbbbbbbbbbbbbbbbdc...
             .cddbbbbbbbbbbbbbbbbbbbbbbddc...
             .cccccccccccccccccccccccccccc...
-            `, SpriteKind.button)
+            `, SpriteKind.button_small)
         button_lvl_5.setPosition(35, 100)
-        cursor2 = sprites.create(img`
+        kursor = sprites.create(img`
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             . . . . . . . f . . . . . . . . 
@@ -2071,22 +2075,8 @@ sprites.onOverlap(SpriteKind.cursor, SpriteKind.button, function (sprite4, other
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             `, SpriteKind.cursor)
-        controller.moveSprite(cursor2, 80, 80)
-    } else if (otherSprite == button_lvl_1 && controller.A.isPressed()) {
-        currentLevel = 0
-        startNextLevel()
-    } else if (otherSprite == button_lvl_2 && controller.A.isPressed()) {
-        currentLevel = 1
-        startNextLevel()
-    } else if (otherSprite == button_lvl_3 && controller.A.isPressed()) {
-        currentLevel = 2
-        startNextLevel()
-    } else if (otherSprite == button_lvl_4 && controller.A.isPressed()) {
-        currentLevel = 3
-        startNextLevel()
-    } else if (otherSprite == button_lvl_5 && controller.A.isPressed()) {
-        currentLevel = 4
-        startNextLevel()
+        kursor.setStayInScreen(true)
+        controller.moveSprite(kursor, 80, 80)
     }
 })
 function move_lock (bool3: boolean) {
@@ -2109,11 +2099,6 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`active`, function (sprite10, 
     }
 })
 let myEnemy: Sprite = null
-let button_lvl_5: Sprite = null
-let button_lvl_4: Sprite = null
-let button_lvl_3: Sprite = null
-let button_lvl_2: Sprite = null
-let button_lvl_1: Sprite = null
 let projectile3: Sprite = null
 let projectile2: Sprite = null
 let projectile: Sprite = null
@@ -2125,12 +2110,11 @@ let Strom: Sprite = null
 let House1: Sprite = null
 let Zbrojar: Sprite = null
 let StromTmavy: Sprite = null
-let cursor2: Sprite = null
+let kursor: Sprite = null
 let button_2: Sprite = null
 let button_1: Sprite = null
 let Lucistnik: Sprite = null
 let swingingSword = false
-let netopyr: Sprite = null
 let fightScene = false
 let Kral: Sprite = null
 let row = 0
@@ -2147,6 +2131,11 @@ let mec = false
 let luk = false
 let dialogSkoncen2 = false
 let dialogSkoncen = false
+let button_lvl_5: Sprite = null
+let button_lvl_4: Sprite = null
+let button_lvl_3: Sprite = null
+let button_lvl_2: Sprite = null
+let button_lvl_1: Sprite = null
 let currentLevel = 0
 let BowImage: Sprite = null
 let sword: Sprite = null
@@ -2233,6 +2222,12 @@ forever(function () {
         bobr2.ay = speed
         bobr2.setFlag(SpriteFlag.DestroyOnWall, true)
         pause(time)
+    }
+    if (currentLevel == 0 && !(kursor.overlapsWith(button_1))) {
+        if (!(kursor.overlapsWith(button_2))) {
+            button_1.setScale(1.75, ScaleAnchor.Middle)
+            button_2.setScale(1.75, ScaleAnchor.Middle)
+        }
     }
 })
 game.onUpdateInterval(3000, function () {

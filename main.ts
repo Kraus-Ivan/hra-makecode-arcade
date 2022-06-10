@@ -137,6 +137,15 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile12`, function (sprite3,
         info.setLife(0)
     }
 })
+scene.onPathCompletion(SpriteKind.Enemy, function (sprite, location) {
+    if (currentLevel == 5 && fightScene == true) {
+        if (pozice == true) {
+            pozice = false
+        } else if (currentLevel == 5 && fightScene == true) {
+            pozice = true
+        }
+    }
+})
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     // mereni casu natazeni luku
     if (luk == true) {
@@ -523,7 +532,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
 function level5 () {
     dialogSkoncen = false
     dialogSkoncen2 = false
-    tiles.placeOnTile(mySprite, tiles.getTileLocation(0, 7))
+    tiles.placeOnTile(mySprite, tiles.getTileLocation(29, 13))
     fightScene = false
 }
 scene.onOverlapTile(SpriteKind.Player, assets.tile`wood`, function (sprite2, location2) {
@@ -2143,13 +2152,14 @@ let button_1: Sprite = null
 let Lucistnik: Sprite = null
 let swingingSword = false
 let netopyr: Sprite = null
-let fightScene = false
 let Kral: Sprite = null
 let row = 0
 let speed = 0
 let vertical = 0
 let swingingBow = false
 let cas_zacatek = 0
+let pozice = false
+let fightScene = false
 let naBobrovi = false
 let bobr2: Sprite = null
 let time = 0
@@ -2243,13 +2253,10 @@ game.onUpdate(function () {
     }
 })
 game.onUpdateInterval(1000, function () {
-    if (currentLevel == 5 && fightScene == true) {
-        if (netopyr.tilemapLocation() == tiles.getTileLocation(7, 18)) {
-            console.log("drz picu")
-            scene.followPath(netopyr, scene.aStar(tiles.getTileLocation(7, 18), tiles.getTileLocation(7, 27)), 60)
-        } else if (netopyr.tilemapLocation() == tiles.getTileLocation(7, 27)) {
-            scene.followPath(netopyr, scene.aStar(tiles.getTileLocation(7, 27), tiles.getTileLocation(7, 18)), 60)
-        }
+    if (currentLevel == 5 && (fightScene == true && pozice == false)) {
+        scene.followPath(netopyr, scene.aStar(tiles.getTileLocation(7, 18), tiles.getTileLocation(7, 27)), 60)
+    } else if (currentLevel == 5 && (fightScene == true && pozice == true)) {
+        scene.followPath(netopyr, scene.aStar(tiles.getTileLocation(7, 27), tiles.getTileLocation(7, 18)), 60)
     }
 })
 forever(function () {

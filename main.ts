@@ -505,22 +505,22 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                     `)
             } else if (pozice_zbrane[3] == true) {
                 sword.setImage(img`
-                    1 . . . . 1 . . . . . . . . . . 
+                    . . . . . . . . . . 1 . . . . 1 
                     . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . 1 . . . 
-                    . . . c c c . . . . . . . . . . 
-                    . . . c d d c . . . . . . . . . 
-                    . . . c d b d c . . . . . . . . 
-                    1 . . . c d b d c . . . . . . . 
-                    . . . . . c d b d c . . . . . . 
-                    . . . . . . c d b d c . . . . 1 
-                    . . . . . . . c d b d c . . . . 
+                    . . . 1 . . . . . . . . . . . . 
+                    . . . . . . . . . . c c c . . . 
+                    . . . . . . . . . c d d c . . . 
                     . . . . . . . . c d b d c . . . 
-                    1 . . . . . . . . c d b d c . . 
-                    . . . . . . . . . . c d d c . . 
-                    . . . . . . . . . . . c c a c . 
-                    . . . . . . . . . . . . . c c c 
-                    . . . . . . . 1 . . . . . . c c 
+                    . . . . . . . c d b d c . . . 1 
+                    . . . . . . c d b d c . . . . . 
+                    1 . . . . c d b d c . . . . . . 
+                    . . . . c d b d c . . . . . . . 
+                    . . . c d b d c . . . . . . . . 
+                    . . c d b d c . . . . . . . . 1 
+                    . . c d d c . . . . . . . . . . 
+                    . c a c c . . . . . . . . . . . 
+                    c c c . . . . . . . . . . . . . 
+                    c c . . . . . . 1 . . . . . . . 
                     `)
             }
         }
@@ -549,10 +549,10 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
 // level 4\
 // level 5/
 function level5 () {
+    tiles.placeOnTile(mySprite, tiles.getTileLocation(0, 8))
+    fightScene = false
     dialogSkoncen = false
     dialogSkoncen2 = false
-    tiles.placeOnTile(mySprite, tiles.getTileLocation(29, 13))
-    fightScene = false
 }
 scene.onOverlapTile(SpriteKind.Player, assets.tile`wood`, function (sprite2, location2) {
     if (currentLevel == 2) {
@@ -634,7 +634,7 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 function zmena_sloupce () {
-    if (cislo_sloupce == 10) {
+    if (cislo_sloupce == 9) {
         sprites.destroyAllSpritesOfKind(SpriteKind.bobr)
     } else {
         cislo_sloupce = cislo_sloupce + 1
@@ -1119,6 +1119,7 @@ function startNextLevel () {
         tiles.setCurrentTilemap(tilemap`level28`)
         level4()
     } else if (currentLevel == 5) {
+        sprites.destroyAllSpritesOfKind(SpriteKind.bobr)
         scene.setBackgroundImage(img`
             7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
             7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777

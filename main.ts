@@ -138,10 +138,18 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile12`, function (sprite3,
     }
 })
 scene.onPathCompletion(SpriteKind.Enemy, function (sprite, location) {
-    if (pozice == false) {
-        pozice = true
-    } else {
-        pozice = false
+    if (currentLevel == 5 && fightScene == true) {
+        for (let value of enemy_position) {
+            if (location.column == value[0] && location.row == value[1]) {
+                console.log(enemy_position.indexOf(value))
+                pozice = enemy_position.indexOf(value)
+                if ((pozice + 1) % 2 == 0) {
+                    scene.followPath(sprite, scene.aStar(location, tiles.getTileLocation(enemy_position[pozice - 1][0], enemy_position[pozice - 1][1])), 60)
+                } else {
+                    scene.followPath(sprite, scene.aStar(location, tiles.getTileLocation(enemy_position[pozice + 1][0], enemy_position[pozice + 1][1])), 60)
+                }
+            }
+        }
     }
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -392,6 +400,12 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile26`, function (sprite14
         tiles.setTileAt(tiles.getTileLocation(21, 30), sprites.dungeon.chestClosed)
         tiles.setTileAt(tiles.getTileLocation(18, 6), sprites.dungeon.chestClosed)
         tiles.setTileAt(tiles.getTileLocation(16, 20), sprites.dungeon.chestClosed)
+        enemy_position = [
+        [7, 17],
+        [7, 28],
+        [19, 16],
+        [19, 23]
+        ]
         fightScene = true
         netopyr = sprites.create(img`
             ........................
@@ -419,8 +433,9 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile26`, function (sprite14
             ........................
             ........................
             `, SpriteKind.Enemy)
-        tiles.placeOnTile(netopyr, tiles.getTileLocation(7, 18))
-        netopyr = sprites.create(img`
+        tiles.placeOnTile(netopyr, tiles.getTileLocation(7, 17))
+        scene.followPath(netopyr, scene.aStar(tiles.getTileLocation(enemy_position[0][0], enemy_position[0][1]), tiles.getTileLocation(enemy_position[1][0], enemy_position[1][1])), 70)
+        netopyr2 = sprites.create(img`
             ........................
             ........................
             ........................
@@ -446,9 +461,8 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile26`, function (sprite14
             ........................
             ........................
             `, SpriteKind.Enemy)
-        tiles.placeOnTile(netopyr, tiles.getTileLocation(19, 23))
-        pozice = false
-        enemy_position = [[[7, 17], [7, 28]], [[19, 16], [19, 23]]]
+        tiles.placeOnTile(netopyr2, tiles.getTileLocation(19, 16))
+        scene.followPath(netopyr2, scene.aStar(tiles.getTileLocation(enemy_position[2][0], enemy_position[2][1]), tiles.getTileLocation(enemy_position[3][0], enemy_position[3][1])), 70)
     }
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -2178,16 +2192,17 @@ let button_2: Sprite = null
 let button_1: Sprite = null
 let Lucistnik: Sprite = null
 let swingingSword = false
-let enemy_position: number[][][] = []
+let netopyr2: Sprite = null
 let netopyr: Sprite = null
-let fightScene = false
 let Kral: Sprite = null
 let row = 0
 let speed = 0
 let vertical = 0
 let swingingBow = false
 let cas_zacatek = 0
-let pozice = false
+let pozice = 0
+let enemy_position: number[][] = []
+let fightScene = false
 let naBobrovi = false
 let bobr2: Sprite = null
 let time = 0
@@ -2277,15 +2292,6 @@ game.onUpdate(function () {
             naBobrovi = true
         } else {
             naBobrovi = false
-        }
-    }
-})
-game.onUpdateInterval(1000, function () {
-    for (let value of enemy_position) {
-        if (currentLevel == 5 && (fightScene == true && pozice == false)) {
-            scene.followPath(netopyr, scene.aStar(tiles.getTileLocation(7, 18), tiles.getTileLocation(7, 27)), 60)
-        } else if (currentLevel == 5 && (fightScene == true && pozice == true)) {
-            scene.followPath(netopyr, scene.aStar(tiles.getTileLocation(7, 27), tiles.getTileLocation(7, 18)), 60)
         }
     }
 })

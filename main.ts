@@ -138,12 +138,10 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile12`, function (sprite3,
     }
 })
 scene.onPathCompletion(SpriteKind.Enemy, function (sprite, location) {
-    if (currentLevel == 5 && fightScene == true) {
-        if (pozice == true) {
-            pozice = false
-        } else if (currentLevel == 5 && fightScene == true) {
-            pozice = true
-        }
+    if (pozice == false) {
+        pozice = true
+    } else {
+        pozice = false
     }
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -450,12 +448,7 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile26`, function (sprite14
             `, SpriteKind.Enemy)
         tiles.placeOnTile(netopyr, tiles.getTileLocation(19, 23))
         pozice = false
-        enemy_position = [
-        [[7, 17], [[7, 28]]],
-        1,
-        [19, 23],
-        [19, 46]
-        ]
+        enemy_position = [[[7, 17], [7, 28]], [[19, 16], [19, 23]]]
     }
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -2187,6 +2180,7 @@ let Lucistnik: Sprite = null
 let swingingSword = false
 let enemy_position: number[][][] = []
 let netopyr: Sprite = null
+let fightScene = false
 let Kral: Sprite = null
 let row = 0
 let speed = 0
@@ -2194,7 +2188,6 @@ let vertical = 0
 let swingingBow = false
 let cas_zacatek = 0
 let pozice = false
-let fightScene = false
 let naBobrovi = false
 let bobr2: Sprite = null
 let time = 0

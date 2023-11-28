@@ -1,8 +1,6 @@
  
 
 
-> Open this page at [https://kraus-ivan.github.io/hra-makecode-arcade/](https://kraus-ivan.github.io/hra-makecode-arcade/)
-
 ## Use as Extension
 
 This repository can be added as an **extension** in MakeCode.
